@@ -393,7 +393,6 @@ void __init stm32_iomux_init(void)
 	case PLATFORM_STM32_STM3220G_EVAL:
 	case PLATFORM_STM32_STM3240G_EVAL:
 	case PLATFORM_STM32_STM_SOM:
-	case PLATFORM_STM32_STM32F429_DISCO:
 
 #if defined(CONFIG_STM32_USART1)
 		gpio_dsc.port = 0;
