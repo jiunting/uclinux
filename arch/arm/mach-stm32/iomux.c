@@ -342,10 +342,42 @@ void __init stm32_iomux_init(void)
 #endif
 
 		/*
+		 * Pin configuration for SPI of the STM32F429ZI-DISCO board.
+		 */
+#if defined(CONFIG_STM32_SPI1)
+#error          IOMUX for STM32 SPI1 undefined
+#endif
+#if defined(CONFIG_STM32_SPI2)
+#error          IOMUX for STM32 SPI2 undefined
+#endif
+#if defined(CONFIG_STM32_SPI3)
+#error          IOMUX for STM32 SPI3 undefined
+#endif
+#if defined(CONFIG_STM32_SPI4)
+#error          IOMUX for STM32 SPI4 undefined
+#endif
+#if defined(CONFIG_STM32_SPI5)
+		gpio_dsc.port = 5;	/* SCK */
+		gpio_dsc.pin  = 7;      /* PF7 */
+		stm32f2_gpio_config(&gpio_dsc, STM32F2_GPIO_ROLE_SPI5);
+
+		gpio_dsc.port = 5;	/* MISO */ 
+		gpio_dsc.pin  = 8;      /* PF8 */
+		stm32f2_gpio_config(&gpio_dsc, STM32F2_GPIO_ROLE_SPI5);
+
+		gpio_dsc.port = 5;	/* MOSI */
+		gpio_dsc.pin  = 9;      /* PF9 */
+		stm32f2_gpio_config(&gpio_dsc, STM32F2_GPIO_ROLE_SPI5);
+
+		gpio_dsc.port = 2;	/* NCS */
+		gpio_dsc.pin  = 1;      /* PC1 */
+		stm32f2_gpio_config(&gpio_dsc, STM32F2_GPIO_ROLE_OUT);
+#endif
+
+		/*
 		 * Pin configuration for the User LED of the STM32F429ZI-DISCO board.
 		 */
 #if defined(CONFIG_GPIOLIB) && defined(CONFIG_GPIO_SYSFS)
-
 		/* PG13 = LED LD3 */
 		gpio_dsc.port = 6;
 		gpio_dsc.pin  = 13;
