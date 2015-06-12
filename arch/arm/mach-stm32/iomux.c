@@ -105,6 +105,11 @@
 #define STM32F2_GPIO_AF_SDIO	0x0C
 
 /*
+ * System Configuration Controller Clock Enable
+ */
+#define RCC_APB2ENR_SYSCFGEN		(1<<14)
+
+/*
  * GPIO roles (alternative functions); role determines by whom GPIO is used
  */
 enum stm32f2_gpio_role {
@@ -388,8 +393,39 @@ void __init stm32_iomux_init(void)
 		gpio_dsc.pin  = 14;
 		stm32f2_gpio_config(&gpio_dsc, STM32F2_GPIO_ROLE_OUT);
 #endif /* CONFIG_GPIOLIB */
-		break;
 
+#if defined(CONFIG_STM32_MAC)
+		do {
+			static struct stm32f2_gpio_dsc mii_gpio[] = {
+				{0,  1}, {0,  2}, {0,  7},
+				{1,  5}, {1,  8},
+				{2,  1}, {2,  2}, {2,  3}, {2,  4}, {2,  5},
+				{6, 11}, {6, 13}, {6, 14},
+				{7,  2}, {7,  3}, {7,  6}, {7,  7},
+				{8, 10}
+			};
+			static struct stm32f2_gpio_dsc rmii_gpio[] = {
+				{0,  1}, {0,  2}, {0,  7},
+				{2,  1}, {2,  4}, {2,  5},
+				{6, 11}, {6, 13}, {6, 14},
+			};
+			int	i;
+
+			if (platform == PLATFORM_STM32_STM_SOM) {
+				for (i = 0; i < ARRAY_SIZE(rmii_gpio); i++) {
+					stm32f2_gpio_config(&rmii_gpio[i],
+						STM32F2_GPIO_ROLE_ETHERNET);
+				}
+			} else {
+				for (i = 0; i < ARRAY_SIZE(mii_gpio); i++) {
+					stm32f2_gpio_config(&mii_gpio[i],
+						STM32F2_GPIO_ROLE_ETHERNET);
+				}
+			}
+		} while (0);
+#endif
+
+		break;
 	case PLATFORM_STM32_STM3220G_EVAL:
 	case PLATFORM_STM32_STM3240G_EVAL:
 	case PLATFORM_STM32_STM_SOM:
@@ -430,7 +466,8 @@ void __init stm32_iomux_init(void)
 			};
 			int	i;
 
-			if (platform == PLATFORM_STM32_STM_SOM) {
+			if (platform == PLATFORM_STM32_STM_SOM ||
+			    platform == PLATFORM_STM32_STM32429_DISCO) {
 				for (i = 0; i < ARRAY_SIZE(rmii_gpio); i++) {
 					stm32f2_gpio_config(&rmii_gpio[i],
 						STM32F2_GPIO_ROLE_ETHERNET);
