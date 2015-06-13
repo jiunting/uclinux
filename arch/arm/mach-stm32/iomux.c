@@ -105,11 +105,6 @@
 #define STM32F2_GPIO_AF_SDIO	0x0C
 
 /*
- * System Configuration Controller Clock Enable
- */
-#define RCC_APB2ENR_SYSCFGEN		(1<<14)
-
-/*
  * GPIO roles (alternative functions); role determines by whom GPIO is used
  */
 enum stm32f2_gpio_role {
@@ -466,8 +461,7 @@ void __init stm32_iomux_init(void)
 			};
 			int	i;
 
-			if (platform == PLATFORM_STM32_STM_SOM ||
-			    platform == PLATFORM_STM32_STM32429_DISCO) {
+			if (platform == PLATFORM_STM32_STM32429_DISCO) {
 				for (i = 0; i < ARRAY_SIZE(rmii_gpio); i++) {
 					stm32f2_gpio_config(&rmii_gpio[i],
 						STM32F2_GPIO_ROLE_ETHERNET);
